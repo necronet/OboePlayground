@@ -26,9 +26,16 @@ void AudioEngine::start() {
 
 oboe::DataCallbackResult
 AudioEngine::onAudioReady(oboe::AudioStream *oboeStream, void *audioData, int32_t numFrames) {
-    oscilator.renderAudio(static_cast<float *>(audioData), numFrames);
+
+    data.data = static_cast<float *>(audioData);
+    data.numFrames = numFrames;
+    oscilator.renderAudio(data.data, numFrames);
 
     return oboe::DataCallbackResult::Continue;
+}
+
+DataStr AudioEngine::getCurrentData() {
+    return data;
 }
 
 void AudioEngine::tap(bool i) {
@@ -42,5 +49,9 @@ void AudioEngine::setAmplitude(float amplitude) {
 
 void AudioEngine::setFrequency(float frequency) {
     oscilator.setFrequency(frequency);
+}
+
+bool AudioEngine::isWaveOn() {
+    return oscilator.isWaveOn();
 }
 

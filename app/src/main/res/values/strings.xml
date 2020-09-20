@@ -3,4 +3,6 @@
     <string name="number_text">number %1$s</string>
     <string name="frequency" >Frequency: %1$d Hz</string>
     <string name="amplitude" >Amplitude: %1$d </string>
+    <string name="hello_oboe">Hello Oboe</string>
+    <string name="sound_playing">Play sound!</string>
 </resources>

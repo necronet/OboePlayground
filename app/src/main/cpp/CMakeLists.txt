@@ -11,15 +11,17 @@ cmake_minimum_required(VERSION 3.4.1)
 # Gradle automatically packages shared libraries with your APK.
 
 add_library( # Sets the name of the library.
-             native-lib
+        native-lib
 
-             # Sets the library as a shared library.
-             SHARED
+        # Sets the library as a shared library.
+        SHARED
 
-             # Provides a relative path to your source file(s).
-             native-lib.cpp
-             AudioEngine.cpp
-             Oscilator.cpp)
+        # Provides a relative path to your source file(s).
+        native-lib.cpp
+        AudioEngine.cpp
+        Oscilator.cpp)
+
+add_library(sound-playing SHARED sound-playing/sound-playing.cpp sound-playing/SoundGame.cpp)
 
 # Searches for a specified prebuilt library and stores the path as a
 # variable. Because CMake includes system libraries in the search path by
@@ -28,34 +30,35 @@ add_library( # Sets the name of the library.
 # completing its build.
 
 find_library( # Sets the name of the path variable.
-              log-lib
+        log-lib
 
-              # Specifies the name of the NDK library that
-              # you want CMake to locate.
-              log )
+        # Specifies the name of the NDK library that
+        # you want CMake to locate.
+        log)
 
 # Specifies libraries CMake should link to your target library. You
 # can link multiple libraries, such as libraries you define in this
 # build script, prebuilt third-party libraries, or system libraries.
 
 # Set the path to the Oboe directory.
-set (OBOE_DIR /Users/joseayerdis/Documents/repos/oboe)
+set(OBOE_DIR /Users/joseayerdis/Documents/repos/oboe)
 
 # Add the Oboe library as a subdirectory in your project.
 # add_subdirectory tells CMake to look in this directory to
 # compile oboe source files using oboe's CMake file.
 # ./oboe specifies where the compiled binaries will be stored
-add_subdirectory (${OBOE_DIR} oboe)
+add_subdirectory(${OBOE_DIR} oboe)
 
 # Specify the path to the Oboe header files.
 # This allows targets compiled with this CMake (application code)
 # to see public Oboe headers, in order to access its API.
-include_directories (${OBOE_DIR}/include)
+include_directories(${OBOE_DIR}/include)
 
 target_link_libraries( # Specifies the target library.
-                       native-lib
+        native-lib
+        # Links the target library to the log library
+        # included in the NDK.
+        ${log-lib}
+        oboe)
 
-                       # Links the target library to the log library
-                       # included in the NDK.
-                       ${log-lib}
-                        oboe )
+target_link_libraries(sound-playing ${log-lib} android oboe)

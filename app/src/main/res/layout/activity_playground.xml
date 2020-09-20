@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:padding="8dp"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/frequencyLabel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif"
+        android:textSize="32sp"
+        tools:text="0 Hz"
+        />
+
+    <SeekBar
+        android:id="@+id/seekBarFrequency"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:min="40"
+        android:max="700"
+        />
+
+    <TextView
+        android:id="@+id/amplitudeLabel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif"
+        android:textSize="32sp"
+        tools:text="0 Hz"
+        />
+
+    <SeekBar
+        android:id="@+id/seekBarAmplitude"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:min="0"
+        android:max="100"
+        />
+
+    <info.necronet.oboeplayground.LiveAudioView
+        android:id="@+id/liveAudioView"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:background="#000000"
+        />
+
+</LinearLayout>

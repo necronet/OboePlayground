@@ -14,6 +14,7 @@ constexpr double two_KPI = 2 * kPI;
 template <typename T>
 class Oscilator  {
 public:
+    bool isWaveOn();
     void renderAudio(T *audioData, int32_t numFrames);
     void setWaveOn(bool isWaveOn);
     void setAmplitude(float amplitude);
@@ -22,6 +23,7 @@ public:
 private:
     bool mIsWaveOn = false;
     float mAmplitude = .1;
+    float mCurrentAmplitude = 0;
     double mPhase = 0;
     double mFrequency = 440.0;
     double defaultSR = 48000;

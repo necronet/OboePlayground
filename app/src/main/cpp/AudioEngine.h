@@ -8,9 +8,15 @@
 #include <oboe/Oboe.h>
 #include "Oscilator.h"
 
+struct DataStr {
+    float* data;
+    int32_t numFrames;
+};
+
 class AudioEngine : public oboe::AudioStreamCallback {
 
 public:
+    DataStr data;
     void start();
 
     oboe::DataCallbackResult
@@ -19,9 +25,11 @@ public:
     oboe::AudioStream *stream;
     Oscilator<float> oscilator;
 
+    DataStr getCurrentData();
     void tap(bool i);
     void setAmplitude(float amplitude);
     void setFrequency(float frequency);
+    bool isWaveOn();
 };
 
 

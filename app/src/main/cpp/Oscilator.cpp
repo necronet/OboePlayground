@@ -9,13 +9,12 @@
 template<>
 void Oscilator<float>::renderAudio(float *audioData, int32_t numFrames) {
     if (mIsWaveOn) {
-        for (int i = 0 ; i < numFrames; i++) {
+        int i =0;
+        for (i = 0 ; i < numFrames; i++) {
 
             if (mPhase <= kPI) {
-                __android_log_print(ANDROID_LOG_INFO, "JNI Call", "Up");
                 audioData[i] = -mAmplitude;
             } else {
-                __android_log_print(ANDROID_LOG_INFO, "JNI Call", "Down");
                 audioData[i] = mAmplitude;
             }
 
@@ -25,14 +24,22 @@ void Oscilator<float>::renderAudio(float *audioData, int32_t numFrames) {
             }
 
         }
+
     } else {
         memset(audioData, 0, sizeof(float) * numFrames);
     }
+
+
 }
 
 template<>
 void Oscilator<float>::setWaveOn(bool isWaveOn) {
     mIsWaveOn = isWaveOn;
+}
+
+template<>
+bool Oscilator<float>::isWaveOn() {
+    return mIsWaveOn;
 }
 
 template<>
