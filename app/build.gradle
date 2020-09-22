@@ -12,11 +12,11 @@ android {
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
-
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
         externalNativeBuild {
             cmake {
-                cppFlags ""
+                cppFlags "-std=c++14"
             }
         }
     }
@@ -27,6 +27,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
     externalNativeBuild {
         cmake {
             path "src/main/cpp/CMakeLists.txt"

@@ -37,15 +37,13 @@ class OboeSoundPlaying : AppCompatActivity() {
     }
 
     fun setDefaultStreamValues(context: Context) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-            val myAudioMgr = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
-            val sampleRateStr = myAudioMgr.getProperty(AudioManager.PROPERTY_OUTPUT_SAMPLE_RATE)
-            val defaultSampleRate = sampleRateStr.toInt()
-            val framesPerBurstStr =
-                myAudioMgr.getProperty(AudioManager.PROPERTY_OUTPUT_FRAMES_PER_BUFFER)
-            val defaultFramesPerBurst = framesPerBurstStr.toInt()
-            native_setDefaultStreamValues(defaultSampleRate, defaultFramesPerBurst)
-        }
+        val myAudioMgr = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
+        val sampleRateStr = myAudioMgr.getProperty(AudioManager.PROPERTY_OUTPUT_SAMPLE_RATE)
+        val defaultSampleRate = sampleRateStr.toInt()
+        val framesPerBurstStr =
+            myAudioMgr.getProperty(AudioManager.PROPERTY_OUTPUT_FRAMES_PER_BUFFER)
+        val defaultFramesPerBurst = framesPerBurstStr.toInt()
+        native_setDefaultStreamValues(defaultSampleRate, defaultFramesPerBurst)
     }
 
     private external fun native_onStart(assetManager: AssetManager)

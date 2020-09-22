@@ -5,6 +5,9 @@
 
 cmake_minimum_required(VERSION 3.4.1)
 
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14")
+
+
 # Creates and names a library, sets it as either STATIC
 # or SHARED, and provides the relative paths to its source code.
 # You can define multiple libraries, and CMake builds them for you.
@@ -21,7 +24,16 @@ add_library( # Sets the name of the library.
         AudioEngine.cpp
         Oscilator.cpp)
 
-add_library(sound-playing SHARED sound-playing/sound-playing.cpp sound-playing/SoundGame.cpp)
+add_library(sound-playing SHARED
+                    sound-playing/logger.h
+                    sound-playing/NDKExtractor.cpp
+                    sound-playing/AAssetDataSource.cpp
+                    sound-playing/IRenderableAudio.h
+                    sound-playing/DataSource.h
+                    sound-playing/Player.cpp
+                    sound-playing/sound-playing.cpp
+                    sound-playing/SoundGame.cpp
+                    sound-playing/OpenGLFunctions.cpp)
 
 # Searches for a specified prebuilt library and stores the path as a
 # variable. Because CMake includes system libraries in the search path by
@@ -61,4 +73,4 @@ target_link_libraries( # Specifies the target library.
         ${log-lib}
         oboe)
 
-target_link_libraries(sound-playing ${log-lib} android oboe)
+target_link_libraries(sound-playing ${log-lib} android oboe GLESv2 mediandk)
