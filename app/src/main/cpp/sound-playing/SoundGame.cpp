@@ -84,11 +84,26 @@ bool SoundGame::setupAudioSources() {
 
     LOGD("Audio properly setup from compressed asset");
     if(mClapSource == nullptr) {
-        LOGD("Clap source is null");
+        LOGE("Clap source is null");
         return false;
     }
 
     mClap = std::make_unique<Player>(mClapSource);
+
+    std::shared_ptr<AAssetDataSource> backingTrackSource {
+            AAssetDataSource::newFromCompressedAsset(mAssetManager, "FUNKY_HOUSE.mp3", &targetProperties)
+    };
+
+    if (backingTrackSource == nullptr){
+        LOGE("Could not load source data for backing track");
+        return false;
+    }
+    mBackingTrack = std::make_unique<Player>(backingTrackSource);
+    mBackingTrack->setPlaying(true);
+    mBackingTrack->setLooping(true);
+    // Add both players to a mixer
+    mixer.addTrack(mClap.get());
+    mixer.addTrack(mBackingTrack.get());
 
     return true;
 }
@@ -104,10 +119,14 @@ bool SoundGame::openStream() {
     builder.setChannelCount(2);
 
     builder.setCallback(this);
-    return builder.openManagedStream(mAudioStream) == Result::OK;
+
+    Result result = builder.openManagedStream(mAudioStream);
+    mixer.setChannelCount(mAudioStream->getChannelCount());
+
+    return result == Result::OK;
 }
 
 DataCallbackResult SoundGame::onAudioReady(AudioStream *oboeStream, void *audioData, int32_t numFrames) {
-    mClap->renderAudio(static_cast<float *>(audioData), numFrames);
+    mixer.renderAudio(static_cast<float *>(audioData), numFrames);
     return DataCallbackResult::Continue;
 }

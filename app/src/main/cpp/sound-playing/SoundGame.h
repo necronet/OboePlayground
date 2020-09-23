@@ -5,6 +5,7 @@
 #include <oboe/Oboe.h>
 #include <future>
 #include "Player.h"
+#include "Mixer.h"
 
 using namespace oboe;
 
@@ -32,8 +33,6 @@ public:
 
     void tick();
 
-    std::unique_ptr<Player> mClap;
-
     bool setupAudioSources();
 
     bool openStream();
@@ -42,6 +41,9 @@ public:
     onAudioReady(AudioStream *oboeStream, void *audioData, int32_t numFrames) override;
 
 private:
+    std::unique_ptr<Player> mClap;
+    std::unique_ptr<Player> mBackingTrack;
+    Mixer mixer;
     AAssetManager &mAssetManager;
     ManagedStream mAudioStream{nullptr};
     std::atomic<GameState> mGameState { GameState::Loading };
