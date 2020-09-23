@@ -6,6 +6,7 @@
 #include <future>
 #include "Player.h"
 #include "Mixer.h"
+#include "LockFreeQueue.h"
 
 using namespace oboe;
 
@@ -48,6 +49,10 @@ private:
     ManagedStream mAudioStream{nullptr};
     std::atomic<GameState> mGameState { GameState::Loading };
     std::future<void> mLoadingResult;
+
+    LockFreeQueue<int64_t, 4> mClapEvents;
+    std::atomic<int64_t> mCurrentFrame { 0 };
+    std::atomic<int64_t> mSongPositionMs { 0 };
 };
 
 #endif

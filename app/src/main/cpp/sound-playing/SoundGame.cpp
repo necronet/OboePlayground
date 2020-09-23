@@ -2,6 +2,25 @@
 #include "AAssetDataSource.h"
 #include "logger.h"
 
+constexpr int64_t kMillisecondsInSecond = 1000;
+constexpr int64_t kNanosecondsInMillisecond = 1000000;
+
+enum class TapResult {
+    Early,
+    Late,
+    Success
+};
+
+int64_t nowUptimeMillis();
+
+constexpr int64_t convertFramesToMillis(const int64_t frames, const int sampleRate){
+    return static_cast<int64_t>((static_cast<double>(frames)/ sampleRate) * kMillisecondsInSecond);
+}
+
+TapResult getTapResult(int64_t tapTimeInMillis, int64_t tapWindowInMillis);
+
+void renderEvent(TapResult r);
+
 
 SoundGame::SoundGame(AAssetManager &assetManager): mAssetManager(assetManager) {
 
@@ -59,6 +78,10 @@ void SoundGame::load() {
         mGameState = GameState::FailedToLoad;
         return;
     }
+
+    mClapEvents.push(0);
+    mClapEvents.push(500);
+    mClapEvents.push(1000);
 
     Result result = mAudioStream->requestStart();
     if (result != Result::OK){
@@ -127,6 +150,22 @@ bool SoundGame::openStream() {
 }
 
 DataCallbackResult SoundGame::onAudioReady(AudioStream *oboeStream, void *audioData, int32_t numFrames) {
-    mixer.renderAudio(static_cast<float *>(audioData), numFrames);
+    float *outputBuffer = static_cast<float *>(audioData);
+    int64_t nextClapEventMs;
+
+    for (int i = 0; i < numFrames; ++i) {
+
+        mSongPositionMs = convertFramesToMillis(
+                mCurrentFrame,
+                mAudioStream->getSampleRate());
+
+        if (mClapEvents.peek(nextClapEventMs) && mSongPositionMs >= nextClapEventMs){
+            mClap->setPlaying(true);
+            mClapEvents.pop(nextClapEventMs);
+        }
+        mixer.renderAudio(outputBuffer+(oboeStream->getChannelCount()*i), 1);
+        mCurrentFrame++;
+    }
+
     return DataCallbackResult::Continue;
 }

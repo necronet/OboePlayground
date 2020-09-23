@@ -25,6 +25,7 @@ add_library( # Sets the name of the library.
         Oscilator.cpp)
 
 add_library(sound-playing SHARED
+                    sound-playing/LockFreeQueue.h
                     sound-playing/Mixer.h
                     sound-playing/logger.h
                     sound-playing/NDKExtractor.cpp
